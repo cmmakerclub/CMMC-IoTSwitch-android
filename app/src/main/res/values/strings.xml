@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CMMC IoT Switch</string>
+    <string name="title_activity_configuration">ConfigurationActivity</string>
+</resources>
