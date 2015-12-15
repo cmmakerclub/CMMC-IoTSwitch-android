@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmciotswitch;
+package com.cmmakerclub.iot.cmmcswitch;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
