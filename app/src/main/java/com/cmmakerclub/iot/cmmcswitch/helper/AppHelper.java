@@ -39,4 +39,12 @@ public class AppHelper {
         return mSharedPref;
     }
 
+    public static String getString(Context context, String key, String fallback) {
+        SharedPreferences mSharedPref = context.getSharedPreferences(Constants.APP_PREF,
+                Context.MODE_PRIVATE);
+
+
+        return mSharedPref.getString(key, fallback);
+    }
+
 }

@@ -105,7 +105,9 @@ public class MQTTHelper implements MqttCallback {
         }
         else {
             try {
+                Log.d(TAG, "connecting..");
                 mClient.connect(mConnOpts);
+                Log.d(TAG, "connected.!");
                 BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECTED));
             } catch (MqttException e) {
                 BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECT_FAIL));

@@ -13,10 +13,10 @@ public class ViewModel {
         public String topic;
         public String clientId;
 
-        public MqttConfig(String host) {
+        public MqttConfig(String host, String topic) {
             this.host = host;
             this.port = "1883";
-            this.topic = "hello";
+            this.topic = topic;
             this.clientId = "CMMC-" + UUID.randomUUID().toString().split("-")[0];
         }
     }

@@ -50,11 +50,12 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/emailEditText"
+                    android:id="@+id/host_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="70dp"
                     android:gravity="center"
+
                     android:hint="HOST"
                     android:text="@{config.host}"
                     android:maxLines="1"
@@ -89,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="70dp"
                     android:gravity="center"
+                    android:id="@+id/topic_edittext"
                     android:hint="TOPIC"
                     android:text="@{config.topic}"
                     android:maxLines="1"

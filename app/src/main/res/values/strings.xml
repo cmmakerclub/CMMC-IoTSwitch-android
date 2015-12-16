@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CMMC IoT Switch</string>
     <string name="title_activity_configuration">Configuration</string>
+    <string name="error_field_required">This field is required.</string>
 </resources>

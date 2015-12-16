@@ -56,9 +56,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "MQTT SUBSCRIBED (line 35)");
                 break;
             case MQTTHelper.MqttEvent.MQTT_MESSAGE_ARRIVED:
-                char c = event.mqttMessage.toString().charAt(0);
-                char temp = 0b111 << 4;
-                updateUI(temp|c);
+                String msg = event.mqttMessage.toString();
+                char c = msg.charAt(msg.length()-1);
+                mCurrentState = (0b111<<4)|c;
+                updateUI(mCurrentState);
                 Log.d(TAG, "" + event.mqttMessage.toString());
                 break;
             case MQTTHelper.MqttEvent.MQTT_DELIVER_COMPLETED:
@@ -111,7 +112,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         masterButton.setChecked(mCurrentState!=0);
-        updateUI(mCurrentState);
+    }
+
+    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button10})
+    public void buttonClicked(ToggleButton button) {
+        char c = (char) ((0b110 << 4) | mCurrentState);
+        Log.d(TAG, "updateUI: CHAR = " + c);
+        MQTTHelper_.getInstance_(mContext).publish(String.valueOf(c), true);
     }
 
     @Override
@@ -130,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(int currentState) {
         char c = (char) ((0b110 << 4) | currentState);
         ButterKnife.apply(nameViews, AppHelper.UPDATE_TOGGLE_STATE, c);
-        Log.d(TAG, "updateUI: CHAR = " + c);
     }
 
     @Override
