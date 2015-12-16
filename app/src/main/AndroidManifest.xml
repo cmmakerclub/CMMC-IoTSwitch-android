@@ -12,7 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.cmmakerclub.iot.cmmcswitch.MainActivity"
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="96301155506cd35d841ea153657978e3979ee19a" />
+
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:label="@string/title_activity_configuration"
             android:screenOrientation="portrait">
 
             <intent-filter>
@@ -22,15 +34,11 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="96301155506cd35d841ea153657978e3979ee19a" />
-
         <activity
-            android:screenOrientation="portrait"
-            android:name="com.cmmakerclub.iot.cmmcswitch.ConfigurationActivity"
+            android:name=".activity.ConfigurationActivity"
             android:label="@string/title_activity_configuration"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

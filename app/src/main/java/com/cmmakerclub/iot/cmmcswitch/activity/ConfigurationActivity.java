@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmcswitch;
+package com.cmmakerclub.iot.cmmcswitch.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.cmmakerclub.iot.cmmcswitch.R;
 import com.cmmakerclub.iot.cmmcswitch.databinding.ActivityConfigurationBinding;
 import com.cmmakerclub.iot.cmmcswitch.databinding.ContentConfigurationBinding;
 import com.cmmakerclub.iot.cmmcswitch.model.ViewModel;

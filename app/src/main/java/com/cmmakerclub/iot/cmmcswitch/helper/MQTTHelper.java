@@ -58,6 +58,7 @@ public class MQTTHelper implements MqttCallback {
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
         MqttEvent event = new MqttEvent();
         event.type = MqttEvent.MQTT_MESSAGE_ARRIVED;
+        event.mqttMessage = mqttMessage;
         BusProvider.getInstance().postQueue(event);
     }
 
@@ -66,10 +67,12 @@ public class MQTTHelper implements MqttCallback {
         BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_DELIVER_COMPLETED));
     }
 
-    public void subscribe(String topic, int qos, MqttCallback callback) {
+    @Background
+    public void subscribe(String topic, int qos) {
         try {
             mClient.subscribe(topic, qos);
             Log.d(TAG, "subscribe topic = " + topic);
+            BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_SUBSCRIBED));
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -94,6 +97,7 @@ public class MQTTHelper implements MqttCallback {
 
     }
 
+    @Background
     public void connect() {
         BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECTING));
         if (mClient.isConnected()) {
@@ -159,7 +163,10 @@ public class MQTTHelper implements MqttCallback {
         public static final int MQTT_CONNECT_FAIL = 0x05;
         public static final int MQTT_CONNECTING = 0x06;
         public static final int MQTT_PUBLISHING = 0x07;
+        public static final int MQTT_SUBSCRIBED = 0x08;
         public int type;
+
+        public MqttMessage mqttMessage;
 
         public MqttEvent(int type) {
             this.type = type;

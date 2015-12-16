@@ -46,9 +46,9 @@ public class MyApplication extends Application {
     synchronized public Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            // testing
-//            if (BuildConfig.FLAVOR.equals("server_production") == false) {
-//            }
+            if (BuildConfig.FLAVOR.equals("server_production")) {
+
+            }
 
             analytics.setDryRun(true);
             analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);

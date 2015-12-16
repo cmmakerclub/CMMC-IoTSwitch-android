@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmcswitch.helper;
+package com.cmmakerclub.iot.cmmcswitch;
 
 /**
  * Created by nat on 10/14/15 AD.

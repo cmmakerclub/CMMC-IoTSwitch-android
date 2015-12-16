@@ -106,7 +106,7 @@
             android:layout_marginBottom="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
-            android:background="@drawable/button_custom"
+            android:background="@drawable/button_master_custom"
             android:gravity="center"
             android:textColor="@drawable/button_text_custom"
             android:textOff="OFF"

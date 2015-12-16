@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.CompoundButton;
 
+import com.cmmakerclub.iot.cmmcswitch.Constants;
+
 import butterknife.ButterKnife;
 
 /**
@@ -21,12 +23,14 @@ public class AppHelper {
     };
 
 
-    public static final ButterKnife.Setter<CompoundButton, Integer> UPDATE_TOGGLE_STATE = new ButterKnife.Setter<CompoundButton, Integer>() {
-        @Override
-        public void set(CompoundButton view, Integer value, int index) {
-            Log.d(TAG, "UPDATE_TOGGLE_STATE (line 27): " + index +" = " + view.isChecked());
-        }
-    };
+    public static final ButterKnife.Setter<CompoundButton, Character> UPDATE_TOGGLE_STATE =
+            new ButterKnife.Setter<CompoundButton, Character>() {
+                @Override
+                public void set(CompoundButton view, Character value, int index) {
+                    int result = value.charValue() & (1 << index);
+                    view.setChecked(result!=0);
+                }
+            };
 
 
     public static SharedPreferences getSharedPreference(Context context) {
