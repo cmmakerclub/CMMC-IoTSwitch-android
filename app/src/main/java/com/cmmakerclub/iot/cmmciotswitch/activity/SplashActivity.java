@@ -17,11 +17,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        // Hide the Title bar of this activity screen
-//        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
+        super.onCreate(savedInstanceState);
         handler = new Handler();
 
         runnable = new Runnable() {

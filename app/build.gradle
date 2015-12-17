@@ -41,9 +41,9 @@ android {
     defaultConfig {
         applicationId "com.cmmakerclub.iot.cmmciotswitch"
         minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 9
-        versionName "1.0 alpha"
+        targetSdkVersion 21
+        versionCode 12
+        versionName "1.0 beta"
         buildConfigField "String", "GOOGLE_ANALYTICS", "$UA"
     }
     buildTypes {
@@ -51,6 +51,21 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/ASL2.0'
     }
 
     lintOptions {
@@ -63,11 +78,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
-    compile 'com.google.zxing:core:3.2.0'
-    compile 'com.scottyab:secure-preferences-lib:0.1.3'
-    compile 'com.google.code.gson:gson:2.4'
     compile 'com.android.support:design:23.1.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup:otto:1.3.8'

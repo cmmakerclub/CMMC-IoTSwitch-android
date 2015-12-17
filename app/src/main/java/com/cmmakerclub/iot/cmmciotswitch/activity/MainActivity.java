@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -15,11 +16,10 @@ import android.widget.ToggleButton;
 import com.cmmakerclub.iot.cmmciotswitch.R;
 import com.cmmakerclub.iot.cmmciotswitch.helper.AppHelper;
 import com.cmmakerclub.iot.cmmciotswitch.helper.BusProvider;
-import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTOptions;
-import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTOptions_;
 import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTHelper;
 import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTHelper_;
-import com.crashlytics.android.Crashlytics;
+import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTOptions;
+import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTOptions_;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -28,70 +28,76 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends BaseActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     @Bind({R.id.button1, R.id.button2, R.id.button3, R.id.button4})
     List<ToggleButton> nameViews;
 
-    @Bind(R.id.button10) ToggleButton masterButton;
+    @Bind(R.id.button10)
+    ToggleButton masterButton;
     SparseIntArray bitMask = new SparseIntArray();
 
     private int mCurrentState = 0b0000;
     private Context mContext;
+    final private EventHandler mEventHandler
+            = new EventHandler();
 
-    @Subscribe
-    public void onBusMessage(MQTTHelper.MqttEvent event) {
-        switch (event.type) {
-            case MQTTHelper.MqttEvent.MQTT_CONNECTING:
-                Log.d(TAG, "ON-CONNECTING(line 42): ");
-                break;
-            case MQTTHelper.MqttEvent.MQTT_CONNECTION_LOST:
-                Log.d(TAG, "ON-MQTT_CONNECTION_LOST line 45): ");
-                MQTTHelper_.getInstance_(mContext).connect();
-                break;
-            case MQTTHelper.MqttEvent.MQTT_CONNECTED:
-                Log.d(TAG, "MQTT CONNECTED (line 55)");
-                String topic = MQTTOptions_.getInstance_(mContext).topic;
-                Snackbar.make(findViewById(android.R.id.content), "MQTT CONNECTED to => " + topic,
-                        Snackbar.LENGTH_SHORT).show();
-                MQTTHelper_.getInstance_(mContext).subscribe(topic, 0);
-                break;
-            case MQTTHelper.MqttEvent.MQTT_SUBSCRIBED:
-                Log.d(TAG, "MQTT SUBSCRIBED (line 35)");
-                break;
-            case MQTTHelper.MqttEvent.MQTT_MESSAGE_ARRIVED:
-                String msg = event.mqttMessage.toString();
-                char c = msg.charAt(msg.length()-1);
-                mCurrentState = (0b0001111)&c;
-                updateUI(mCurrentState);
-                Log.d(TAG, "" + event.mqttMessage.toString());
-                break;
-            case MQTTHelper.MqttEvent.MQTT_DELIVER_COMPLETED:
-                char currentText = (char) ((0b110 << 4) | mCurrentState);
-                Snackbar.make(findViewById(android.R.id.content), "MESSAGE => " + currentText,
-                        Snackbar.LENGTH_LONG).show();
-                break;
-            case MQTTHelper.MqttEvent.MQTT_CONNECT_FAIL:
-                Log.d(TAG, "MQTT_CONNECT FAILED");
-                Snackbar.make(findViewById(android.R.id.content), "MQTT FAILED: => " + event.reason,
-                        Snackbar.LENGTH_INDEFINITE).show();
-                break;
-            case MQTTHelper.MqttEvent.MQTT_ERROR:
-                Log.d(TAG, "ON-MESSAGE ERROR (line 62): ");
-                break;
+
+    public class EventHandler {
+        @Subscribe
+        public void onBusMessage(MQTTHelper.MqttEvent event) {
+
+            switch (event.type) {
+                case MQTTHelper.MqttEvent.MQTT_CONNECTING:
+                    Log.d(TAG, "ON-CONNECTING(line 42): ");
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_CONNECTION_LOST:
+                    Log.d(TAG, "ON-MQTT_CONNECTION_LOST line 45): ");
+                    MQTTHelper_.getInstance_(mContext).connect();
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_CONNECTED:
+                    Log.d(TAG, "MQTT CONNECTED (line 55)");
+                    String topic = MQTTOptions_.getInstance_(mContext).topic;
+                    Snackbar.make(findViewById(android.R.id.content), "MQTT CONNECTED to => " + topic,
+                            Snackbar.LENGTH_SHORT).show();
+                    MQTTHelper_.getInstance_(mContext).subscribe(topic, 0);
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_SUBSCRIBED:
+                    Log.d(TAG, "MQTT SUBSCRIBED (line 35)");
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_MESSAGE_ARRIVED:
+                    String msg = event.mqttMessage.toString();
+                    char c = msg.charAt(msg.length() - 1);
+                    mCurrentState = (0b0001111) & c;
+                    updateUI(mCurrentState);
+                    Log.d(TAG, "" + event.mqttMessage.toString());
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_DELIVER_COMPLETED:
+                    char currentText = (char) ((0b110 << 4) | mCurrentState);
+                    Snackbar.make(findViewById(android.R.id.content), "MESSAGE => " + currentText,
+                            Snackbar.LENGTH_LONG).show();
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_CONNECT_FAIL:
+                    Log.d(TAG, "MQTT_CONNECT FAILED");
+                    Snackbar.make(findViewById(android.R.id.content), "MQTT FAILED: => " + event.reason,
+                            Snackbar.LENGTH_INDEFINITE).show();
+                    break;
+                case MQTTHelper.MqttEvent.MQTT_ERROR:
+                    Log.d(TAG, "ON-MESSAGE ERROR (line 62): ");
+                    break;
+            }
+
         }
 
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        Fabric.with(mContext, new Crashlytics());
         setContentView(R.layout.activity_main);
-        BusProvider.getInstance().register(this);
         Intent intent = new Intent(mContext, ConfigurationActivity.class);
         startActivity(intent);
         ButterKnife.bind(this);
@@ -100,6 +106,13 @@ public class MainActivity extends BaseActivity {
         bitMask.put(R.id.button2, 1 << 1);
         bitMask.put(R.id.button3, 1 << 2);
         bitMask.put(R.id.button4, 1 << 3);
+    }
+
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        BusProvider.getInstance().register(mEventHandler);
     }
 
     @OnClick(R.id.button10)
@@ -123,8 +136,8 @@ public class MainActivity extends BaseActivity {
             mCurrentState &= ~bitMask.get(id);
         }
 
-        char state = (char) (mCurrentState&0b1111);
-        masterButton.setChecked(state!=0);
+        char state = (char) (mCurrentState & 0b1111);
+        masterButton.setChecked(state != 0);
     }
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button10})
@@ -156,7 +169,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        BusProvider.getInstance().unregister(this);
+        BusProvider.getInstance().unregister(mEventHandler);
     }
 
     @Override
@@ -177,4 +190,5 @@ public class MainActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

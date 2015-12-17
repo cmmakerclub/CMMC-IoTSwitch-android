@@ -146,10 +146,10 @@ public class MQTTHelper implements MqttCallback {
         Log.d(TAG, "prepareConnection: " + host);
         try {
             mClient = new MqttClient(host, this.clientId, dataStore);
+            mClient.setCallback(this);
         } catch (MqttException e) {
             e.printStackTrace();
         }
-        mClient.setCallback(this);
     }
 
     public void setHostPort(String host, int port) {
