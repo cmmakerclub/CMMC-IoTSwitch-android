@@ -21,7 +21,7 @@ public class ViewModel {
 
         public MqttConfig(Context context) {
             this.clientId = "CMMC-" + UUID.randomUUID().toString().split("-")[0];
-            this.versionCode = "version: " +BuildConfig.VERSION_CODE;
+            this.versionCode = "versionCode: " +BuildConfig.VERSION_CODE;
             host =  MQTTOptions_.getInstance_(context).host;
             port =  String.valueOf(MQTTOptions_.getInstance_(context).port);
             topic = MQTTOptions_.getInstance_(context).topic;

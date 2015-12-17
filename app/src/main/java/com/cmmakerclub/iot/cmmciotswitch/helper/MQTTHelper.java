@@ -46,7 +46,7 @@ public class MQTTHelper implements MqttCallback {
         mConnOpts = new MqttConnectOptions();
         mConnOpts.setCleanSession(true);
         mConnOpts.setKeepAliveInterval(10);
-        clientId = UUID.randomUUID().toString().split("-")[0];
+        clientId = "CMMC:-" + UUID.randomUUID().toString().split("-")[0];
     }
 
     @Override
