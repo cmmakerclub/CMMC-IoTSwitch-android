@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmcswitch;
+package com.cmmakerclub.iot.cmmciotswitch;
 
 import org.junit.Test;
 

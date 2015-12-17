@@ -1,20 +1,24 @@
-package com.cmmakerclub.iot.cmmcswitch.activity;
+package com.cmmakerclub.iot.cmmciotswitch.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.SparseIntArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
-import com.cmmakerclub.iot.cmmcswitch.R;
-import com.cmmakerclub.iot.cmmcswitch.helper.AppHelper;
-import com.cmmakerclub.iot.cmmcswitch.helper.BusProvider;
-import com.cmmakerclub.iot.cmmcswitch.helper.MQTTHelper;
-import com.cmmakerclub.iot.cmmcswitch.helper.MQTTHelper_;
+import com.cmmakerclub.iot.cmmciotswitch.R;
+import com.cmmakerclub.iot.cmmciotswitch.helper.AppHelper;
+import com.cmmakerclub.iot.cmmciotswitch.helper.BusProvider;
+import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTOptions;
+import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTOptions_;
+import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTHelper;
+import com.cmmakerclub.iot.cmmciotswitch.helper.MQTTHelper_;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 
@@ -26,7 +30,7 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     @Bind({R.id.button1, R.id.button2, R.id.button3, R.id.button4})
     List<ToggleButton> nameViews;
@@ -39,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onBusMessage(MQTTHelper.MqttEvent event) {
-
         switch (event.type) {
             case MQTTHelper.MqttEvent.MQTT_CONNECTING:
                 Log.d(TAG, "ON-CONNECTING(line 42): ");
@@ -50,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case MQTTHelper.MqttEvent.MQTT_CONNECTED:
                 Log.d(TAG, "MQTT CONNECTED (line 55)");
-                MQTTHelper_.getInstance_(mContext).subscribe("hello", 0);
+                String topic = MQTTOptions_.getInstance_(mContext).topic;
+                Snackbar.make(findViewById(android.R.id.content), "MQTT CONNECTED to => " + topic,
+                        Snackbar.LENGTH_SHORT).show();
+                MQTTHelper_.getInstance_(mContext).subscribe(topic, 0);
                 break;
             case MQTTHelper.MqttEvent.MQTT_SUBSCRIBED:
                 Log.d(TAG, "MQTT SUBSCRIBED (line 35)");
@@ -63,7 +69,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "" + event.mqttMessage.toString());
                 break;
             case MQTTHelper.MqttEvent.MQTT_DELIVER_COMPLETED:
-                Log.d(TAG, "ON-MESSAGE DELIVER (line 59): ");
+                char currentText = (char) ((0b110 << 4) | mCurrentState);
+                Snackbar.make(findViewById(android.R.id.content), "MESSAGE => " + currentText,
+                        Snackbar.LENGTH_LONG).show();
+                break;
+            case MQTTHelper.MqttEvent.MQTT_CONNECT_FAIL:
+                Log.d(TAG, "MQTT_CONNECT FAILED");
+                Snackbar.make(findViewById(android.R.id.content), "MQTT FAILED: => " + event.reason,
+                        Snackbar.LENGTH_INDEFINITE).show();
                 break;
             case MQTTHelper.MqttEvent.MQTT_ERROR:
                 Log.d(TAG, "ON-MESSAGE ERROR (line 62): ");
@@ -111,13 +124,14 @@ public class MainActivity extends AppCompatActivity {
             mCurrentState &= ~bitMask.get(id);
         }
 
-        masterButton.setChecked(mCurrentState!=0);
+        char state = (char) ((0b110 << 4) |mCurrentState);
+        masterButton.setChecked(state!=0);
     }
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button10})
     public void buttonClicked(ToggleButton button) {
         char c = (char) ((0b110 << 4) | mCurrentState);
-        Log.d(TAG, "updateUI: CHAR = " + c);
+        Log.d(TAG, "updateUI: CHAR = " + c + " BIN = " + Integer.toBinaryString(c));
         MQTTHelper_.getInstance_(mContext).publish(String.valueOf(c), true);
     }
 
@@ -129,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MQTTHelper_.getInstance_(mContext).setHostPort("cmmc.xyz", 1883);
-        MQTTHelper_.getInstance_(mContext).setTopic("hello");
+        MQTTOptions mConOpts = MQTTOptions_.getInstance_(mContext);
+        MQTTHelper_.getInstance_(mContext).setHostPort(mConOpts.host, mConOpts.port);
+        MQTTHelper_.getInstance_(mContext).setTopic(mConOpts.topic);
         MQTTHelper_.getInstance_(mContext).connect();
     }
 
@@ -143,5 +158,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_config) {
+            Intent intent = new Intent(mContext, ConfigurationActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

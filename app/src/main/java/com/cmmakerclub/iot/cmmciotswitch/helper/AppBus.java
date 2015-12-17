@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmcswitch.helper;
+package com.cmmakerclub.iot.cmmciotswitch.helper;
 
 import android.os.Handler;
 import android.os.Looper;

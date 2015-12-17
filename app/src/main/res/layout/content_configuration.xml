@@ -7,7 +7,7 @@
 
         <variable
             name="config"
-            type="com.cmmakerclub.iot.cmmcswitch.model.ViewModel.MqttConfig" />
+            type="com.cmmakerclub.iot.cmmciotswitch.model.ViewModel.MqttConfig" />
     </data>
 
     <ScrollView
@@ -27,13 +27,6 @@
             android:paddingTop="30dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:text="ยินดีต้อนรับ"
-                android:textSize="20dp" />
 
 
             <ProgressBar
@@ -54,31 +47,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="70dp"
-                    android:gravity="center"
+                    android:gravity="left"
 
                     android:hint="HOST"
-                    android:text="@{config.host}"
-                    android:maxLines="1"
-                    android:paddingBottom="20dp"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="70dp"
-                    android:gravity="center"
-                    android:hint="PORT"
                     android:maxLines="1"
                     android:paddingBottom="20dp"
                     android:singleLine="true"
-                    android:text="@{config.port}"
-                    />
+                    android:text="@{config.host}" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/port_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="70dp"
+                    android:gravity="left"
+                    android:hint="PORT"
+                    android:maxLines="1"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="20dp"
+                    android:singleLine="true"
+                    android:text="@{config.port}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -86,16 +80,16 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="70dp"
-                    android:gravity="center"
                     android:id="@+id/topic_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="70dp"
+                    android:gravity="left"
                     android:hint="TOPIC"
-                    android:text="@{config.topic}"
                     android:maxLines="1"
                     android:paddingBottom="20dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@{config.topic}" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -104,16 +98,25 @@
                 android:layout_height="wrap_content">
 
                 <EditText
+                    android:id="@+id/clientid_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="70dp"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:hint="clientId"
-                    android:text="@{config.clientId}"
                     android:maxLines="1"
                     android:paddingBottom="20dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@{config.clientId}" />
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/version_code_textview"
+                android:textAlignment="viewEnd"
+                android:layout_gravity="end"
+                android:text="@{config.versionCode}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
         </LinearLayout>

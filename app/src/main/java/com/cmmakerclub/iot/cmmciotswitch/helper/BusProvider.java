@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmcswitch.helper;
+package com.cmmakerclub.iot.cmmciotswitch.helper;
 
 public class BusProvider {
     private static final AppBus BUS = new AppBus();

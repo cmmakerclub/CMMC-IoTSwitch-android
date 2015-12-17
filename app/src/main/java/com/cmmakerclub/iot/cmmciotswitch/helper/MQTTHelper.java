@@ -1,4 +1,4 @@
-package com.cmmakerclub.iot.cmmcswitch.helper;
+package com.cmmakerclub.iot.cmmciotswitch.helper;
 
 import android.content.Context;
 import android.util.Log;
@@ -102,15 +102,21 @@ public class MQTTHelper implements MqttCallback {
         BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECTING));
         if (mClient.isConnected()) {
             BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECTED));
-        }
-        else {
+        } else {
             try {
                 Log.d(TAG, "connecting..");
                 mClient.connect(mConnOpts);
                 Log.d(TAG, "connected.!");
                 BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECTED));
             } catch (MqttException e) {
-                BusProvider.getInstance().postQueue(new MqttEvent(MqttEvent.MQTT_CONNECT_FAIL));
+                MqttEvent event = new MqttEvent(MqttEvent.MQTT_CONNECT_FAIL);
+                try {
+                    event.reason = e.getCause().getMessage();
+                }
+                catch (Exception ex) {
+                    event.reason = "unknown reason";
+                }
+                BusProvider.getInstance().postQueue(event);
                 e.printStackTrace();
             }
         }
@@ -167,6 +173,7 @@ public class MQTTHelper implements MqttCallback {
         public static final int MQTT_PUBLISHING = 0x07;
         public static final int MQTT_SUBSCRIBED = 0x08;
         public int type;
+        public String reason;
 
         public MqttMessage mqttMessage;
 

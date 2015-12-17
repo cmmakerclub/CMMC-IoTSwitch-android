@@ -7,7 +7,7 @@
     <data>
         <variable
             name="config"
-            type="com.cmmakerclub.iot.cmmcswitch.model.ViewModel.MqttConfig" />
+            type="com.cmmakerclub.iot.cmmciotswitch.model.ViewModel.MqttConfig" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -34,13 +34,7 @@
             layout="@layout/content_configuration"
             bind:config="@{config}" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_save" />
+
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

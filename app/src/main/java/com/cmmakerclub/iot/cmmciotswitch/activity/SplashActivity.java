@@ -1,29 +1,26 @@
-package com.cmmakerclub.iot.cmmcswitch.activity;
+package com.cmmakerclub.iot.cmmciotswitch.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Window;
 
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
     Handler handler;
     Runnable runnable;
     Long delay_time;
     Long time = 1000L;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Fabric.with(this, new Crashlytics());
         // Hide the Title bar of this activity screen
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
+//        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         handler = new Handler();
 
@@ -36,6 +33,7 @@ public class SplashActivity extends Activity {
         };
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         delay_time = time;
@@ -43,6 +41,7 @@ public class SplashActivity extends Activity {
         time = System.currentTimeMillis();
     }
 
+    @Override
     public void onStop() {
         super.onStop();
         handler.removeCallbacks(runnable);

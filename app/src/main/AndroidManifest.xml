@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cmmakerclub.iot.cmmcswitch">
+    package="com.cmmakerclub.iot.cmmciotswitch">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name="com.cmmakerclub.iot.cmmcswitch.MyApplication"
+        android:name="com.cmmakerclub.iot.cmmciotswitch.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.cmmakerclub.iot.cmmciotswitch.activity.MainActivity"
             android:screenOrientation="portrait">
 
         </activity>
@@ -22,9 +24,9 @@
             android:value="96301155506cd35d841ea153657978e3979ee19a" />
 
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.cmmakerclub.iot.cmmciotswitch.activity.SplashActivity"
             android:theme="@style/SplashTheme"
-            android:label="@string/title_activity_configuration"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
 
             <intent-filter>
@@ -35,7 +37,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ConfigurationActivity"
+            android:name="com.cmmakerclub.iot.cmmciotswitch.activity.ConfigurationActivity"
             android:label="@string/title_activity_configuration"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
