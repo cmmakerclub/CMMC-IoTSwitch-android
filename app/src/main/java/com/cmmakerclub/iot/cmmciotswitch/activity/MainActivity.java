@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
             case MQTTHelper.MqttEvent.MQTT_MESSAGE_ARRIVED:
                 String msg = event.mqttMessage.toString();
                 char c = msg.charAt(msg.length()-1);
-                mCurrentState = (0b111<<4)|c;
+                mCurrentState = (0b0001111)&c;
                 updateUI(mCurrentState);
                 Log.d(TAG, "" + event.mqttMessage.toString());
                 break;
@@ -81,7 +81,6 @@ public class MainActivity extends BaseActivity {
             case MQTTHelper.MqttEvent.MQTT_ERROR:
                 Log.d(TAG, "ON-MESSAGE ERROR (line 62): ");
                 break;
-
         }
 
     }
@@ -124,7 +123,7 @@ public class MainActivity extends BaseActivity {
             mCurrentState &= ~bitMask.get(id);
         }
 
-        char state = (char) ((0b110 << 4) |mCurrentState);
+        char state = (char) (mCurrentState&0b1111);
         masterButton.setChecked(state!=0);
     }
 
