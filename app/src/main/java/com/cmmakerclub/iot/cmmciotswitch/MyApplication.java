@@ -50,7 +50,7 @@ public class MyApplication extends Application {
 
             }
 
-            analytics.setDryRun(true);
+            analytics.setDryRun(false);
             analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
             // --------------
             Tracker t = analytics.newTracker(PROPERTY_ID);
